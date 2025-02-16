@@ -1,6 +1,7 @@
 
 import { FeaturedPost } from "@/components/FeaturedPost";
 import { BlogGrid } from "@/components/BlogGrid";
+import { ImageGenerator } from "@/components/ImageGenerator";
 import { motion } from "framer-motion";
 import { useAuth } from "@/components/AuthProvider";
 import { Button } from "@/components/ui/button";
@@ -52,6 +53,9 @@ const Index = () => {
             Thoughts, stories and ideas.
           </motion.p>
         </header>
+        <div className="mb-8">
+          <ImageGenerator />
+        </div>
         <FeaturedPost />
         <BlogGrid />
       </motion.div>
