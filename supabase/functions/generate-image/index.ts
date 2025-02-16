@@ -27,14 +27,13 @@ serve(async (req) => {
       model: "black-forest-labs/FLUX.1-schnell",
     })
 
-    // Convert the blob to a base64 string
-    const arrayBuffer = await image.arrayBuffer()
-    const base64 = btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)))
-
-    return new Response(
-      JSON.stringify({ image: `data:image/png;base64,${base64}` }),
-      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    )
+    // Return the image directly as a response with proper headers
+    return new Response(image, { 
+      headers: { 
+        ...corsHeaders, 
+        'Content-Type': 'image/png' 
+      } 
+    })
   } catch (error) {
     console.error('Error:', error)
     return new Response(

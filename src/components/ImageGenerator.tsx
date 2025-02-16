@@ -24,13 +24,17 @@ export function ImageGenerator() {
 
     setLoading(true)
     try {
-      const { data, error } = await supabase.functions.invoke('generate-image', {
+      const response = await supabase.functions.invoke('generate-image', {
         body: { prompt }
       })
 
-      if (error) throw error
+      if (response.error) throw response.error
 
-      setGeneratedImage(data.image)
+      // Handle the binary response
+      const blob = new Blob([response.data], { type: 'image/png' })
+      const imageUrl = URL.createObjectURL(blob)
+      setGeneratedImage(imageUrl)
+      
       toast({
         title: "Image generated successfully!",
       })
