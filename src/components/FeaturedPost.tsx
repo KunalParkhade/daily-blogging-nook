@@ -1,7 +1,56 @@
 
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { supabase } from "@/integrations/supabase/client";
+import { Loader2 } from "lucide-react";
+
+interface FeaturedPost {
+  title: string;
+  excerpt: string;
+  created_at: string;
+  read_time: number;
+  image_url: string;
+}
 
 export const FeaturedPost = () => {
+  const [post, setPost] = useState<FeaturedPost | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchFeaturedPost = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('posts')
+          .select('*')
+          .eq('status', 'published')
+          .order('created_at', { ascending: false })
+          .limit(1)
+          .single();
+
+        if (error && error.code !== 'PGRST116') throw error;
+        setPost(data);
+      } catch (error) {
+        console.error('Error fetching featured post:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchFeaturedPost();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-[300px] bg-gray-100 rounded-xl">
+        <Loader2 className="h-8 w-8 animate-spin text-gray-500" />
+      </div>
+    );
+  }
+
+  if (!post) {
+    return null;
+  }
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -11,8 +60,8 @@ export const FeaturedPost = () => {
     >
       <div className="aspect-[21/9] w-full overflow-hidden">
         <img
-          src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158"
-          alt="Featured Post"
+          src={post.image_url || "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158"}
+          alt={post.title}
           className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
         />
       </div>
@@ -21,15 +70,19 @@ export const FeaturedPost = () => {
         <div className="flex items-center space-x-2 text-sm">
           <span>Featured Post</span>
           <span>•</span>
-          <span>Mar 16, 2024</span>
+          <span>{new Date(post.created_at).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric'
+          })}</span>
           <span>•</span>
-          <span>7 min read</span>
+          <span>{post.read_time} min read</span>
         </div>
         <h2 className="mt-2 text-3xl font-bold tracking-tight">
-          The Journey of a Daily Blogger
+          {post.title}
         </h2>
         <p className="mt-4 max-w-2xl text-lg text-gray-200">
-          Embarking on a journey of daily blogging has transformed my perspective on writing, creativity, and personal growth.
+          {post.excerpt}
         </p>
       </div>
     </motion.div>
