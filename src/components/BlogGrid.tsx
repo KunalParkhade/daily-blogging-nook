@@ -56,11 +56,12 @@ export const BlogGrid = () => {
         const { data, error } = await supabase
           .from('posts')
           .select('topic')
-          .eq('status', 'published')
-          .distinct();
+          .eq('status', 'published');
 
         if (error) throw error;
-        const uniqueTopics = data?.map(item => item.topic) || [];
+
+        // Get unique topics using Set
+        const uniqueTopics = [...new Set(data?.map(item => item.topic))];
         setTopics(["all", ...uniqueTopics]);
       } catch (error) {
         console.error('Error fetching topics:', error);
