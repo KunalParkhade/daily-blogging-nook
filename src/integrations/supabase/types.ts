@@ -20,6 +20,7 @@ export type Database = {
           read_time: number
           status: Database["public"]["Enums"]["post_status"]
           title: string
+          topic: string
           updated_at: string
         }
         Insert: {
@@ -32,6 +33,7 @@ export type Database = {
           read_time?: number
           status?: Database["public"]["Enums"]["post_status"]
           title: string
+          topic?: string
           updated_at?: string
         }
         Update: {
@@ -44,6 +46,7 @@ export type Database = {
           read_time?: number
           status?: Database["public"]["Enums"]["post_status"]
           title?: string
+          topic?: string
           updated_at?: string
         }
         Relationships: []
