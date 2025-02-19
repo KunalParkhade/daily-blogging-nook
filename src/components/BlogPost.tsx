@@ -9,7 +9,26 @@ interface BlogPostProps {
   image: string;
 }
 
+// Function to generate a consistent background color based on title
+const getBackgroundGradient = (title: string) => {
+  // Get a number from 0-5 based on the title's first character
+  const colorIndex = title.toLowerCase().charCodeAt(0) % 6;
+  
+  const gradients = [
+    'from-[#F2FCE2] to-[#FFDEE2]', // soft green to pink
+    'from-[#FEF7CD] to-[#D3E4FD]', // soft yellow to blue
+    'from-[#FEC6A1] to-[#E5DEFF]', // soft orange to purple
+    'from-[#FFDEE2] to-[#FDE1D3]', // soft pink to peach
+    'from-[#D3E4FD] to-[#F1F0FB]', // soft blue to gray
+    'from-[#E5DEFF] to-[#FDE1D3]', // soft purple to peach
+  ];
+
+  return gradients[colorIndex];
+};
+
 export const BlogPost = ({ title, excerpt, date, readTime, image }: BlogPostProps) => {
+  const backgroundGradient = getBackgroundGradient(title);
+
   return (
     <motion.div 
       initial={{ opacity: 0, y: 20 }}
@@ -17,7 +36,7 @@ export const BlogPost = ({ title, excerpt, date, readTime, image }: BlogPostProp
       transition={{ duration: 0.5 }}
       className="group cursor-pointer"
     >
-      <div className="overflow-hidden rounded-lg bg-blog-card transition-all duration-300 hover:shadow-lg">
+      <div className={`overflow-hidden rounded-lg bg-gradient-to-br ${backgroundGradient} transition-all duration-300 hover:shadow-lg`}>
         <div className="aspect-video w-full overflow-hidden">
           <img
             src={image}

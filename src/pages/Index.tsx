@@ -18,7 +18,7 @@ const Index = () => {
   }
 
   return (
-    <div className="min-h-screen bg-white px-4 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-[#F6F6F7] via-[#E5DEFF] to-[#D3E4FD] px-4 py-8">
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -29,7 +29,7 @@ const Index = () => {
           <div className="absolute right-0 top-0 flex gap-2">
             <Button
               variant="ghost"
-              className="flex items-center gap-2"
+              className="flex items-center gap-2 bg-white/50 backdrop-blur-sm hover:bg-white/70"
               onClick={() => navigate("/admin")}
             >
               <Settings className="h-4 w-4" />
@@ -37,7 +37,7 @@ const Index = () => {
             </Button>
             <Button
               variant="ghost"
-              className="flex items-center gap-2"
+              className="flex items-center gap-2 bg-white/50 backdrop-blur-sm hover:bg-white/70"
               onClick={signOut}
             >
               <LogOut className="h-4 w-4" />
