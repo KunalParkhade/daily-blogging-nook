@@ -17,6 +17,7 @@ interface PostFormProps {
     excerpt?: string;
     image_url?: string;
     status: "draft" | "published";
+    topic?: string;
   };
   onSuccess?: () => void;
   onCancel?: () => void;
@@ -32,6 +33,7 @@ export const PostForm = ({ post, onSuccess, onCancel }: PostFormProps) => {
     excerpt: post?.excerpt || "",
     image_url: post?.image_url || "",
     status: post?.status || "draft",
+    topic: post?.topic || "general",
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -104,6 +106,17 @@ export const PostForm = ({ post, onSuccess, onCancel }: PostFormProps) => {
             onChange={(e) => setFormData(prev => ({ ...prev, content: e.target.value }))}
             required
             className="min-h-[200px]"
+          />
+        </div>
+
+        <div>
+          <Label htmlFor="topic">Topic</Label>
+          <Input
+            id="topic"
+            value={formData.topic}
+            onChange={(e) => setFormData(prev => ({ ...prev, topic: e.target.value }))}
+            placeholder="Enter topic (e.g., technology, lifestyle, travel)"
+            required
           />
         </div>
 
