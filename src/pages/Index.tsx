@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import { useAuth } from "@/components/AuthProvider";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import { LogOut } from "lucide-react";
+import { LogOut, Settings } from "lucide-react";
 
 const Index = () => {
   const { user, signOut } = useAuth();
@@ -26,7 +26,15 @@ const Index = () => {
         className="mx-auto max-w-7xl"
       >
         <header className="mb-16 text-center relative">
-          <div className="absolute right-0 top-0">
+          <div className="absolute right-0 top-0 flex gap-2">
+            <Button
+              variant="ghost"
+              className="flex items-center gap-2"
+              onClick={() => navigate("/admin")}
+            >
+              <Settings className="h-4 w-4" />
+              Manage Posts
+            </Button>
             <Button
               variant="ghost"
               className="flex items-center gap-2"
