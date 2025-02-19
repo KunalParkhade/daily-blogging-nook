@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
-import { Loader2 } from "lucide-react";
+import { Loader2, PenSquare } from "lucide-react";
 
 interface FeaturedPost {
   title: string;
@@ -25,9 +25,9 @@ export const FeaturedPost = () => {
           .eq('status', 'published')
           .order('created_at', { ascending: false })
           .limit(1)
-          .single();
+          .maybeSingle();
 
-        if (error && error.code !== 'PGRST116') throw error;
+        if (error) throw error;
         setPost(data);
       } catch (error) {
         console.error('Error fetching featured post:', error);
@@ -48,7 +48,13 @@ export const FeaturedPost = () => {
   }
 
   if (!post) {
-    return null;
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[300px] bg-gray-100 rounded-xl text-gray-500">
+        <PenSquare className="h-12 w-12 mb-4" />
+        <p className="text-lg font-medium">No posts published yet</p>
+        <p className="text-sm">Your featured post will appear here once published</p>
+      </div>
+    );
   }
 
   return (
