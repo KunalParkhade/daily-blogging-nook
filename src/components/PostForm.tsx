@@ -4,10 +4,10 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
 import { Loader2 } from "lucide-react";
 import { useAuth } from "./AuthProvider";
+import { RichTextEditor } from "./RichTextEditor";
 
 interface PostFormProps {
   post?: {
@@ -100,12 +100,9 @@ export const PostForm = ({ post, onSuccess, onCancel }: PostFormProps) => {
 
         <div>
           <Label htmlFor="content">Content</Label>
-          <Textarea
-            id="content"
-            value={formData.content}
-            onChange={(e) => setFormData(prev => ({ ...prev, content: e.target.value }))}
-            required
-            className="min-h-[200px]"
+          <RichTextEditor
+            content={formData.content}
+            onChange={(content) => setFormData(prev => ({ ...prev, content }))}
           />
         </div>
 
