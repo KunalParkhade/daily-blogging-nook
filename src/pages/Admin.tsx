@@ -6,14 +6,28 @@ import { PostsList } from "@/components/PostsList";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useToast } from "@/components/ui/use-toast";
 
 const Admin = () => {
   const [isCreating, setIsCreating] = useState(false);
-  const { user } = useAuth();
+  const { user, isAdmin } = useAuth();
   const navigate = useNavigate();
+  const { toast } = useToast();
 
+  // Check if user is authenticated and is an admin
   if (!user) {
     navigate("/auth");
+    return null;
+  }
+
+  // If user is not an admin, show error and redirect
+  if (!isAdmin) {
+    toast({
+      title: "Access Denied",
+      description: "You do not have permission to access the admin panel.",
+      variant: "destructive",
+    });
+    navigate("/");
     return null;
   }
 
