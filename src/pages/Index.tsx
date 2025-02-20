@@ -5,7 +5,7 @@ import { ImageGenerator } from "@/components/ImageGenerator";
 import { motion } from "framer-motion";
 import { useAuth } from "@/components/AuthProvider";
 import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
 import { LogOut, Settings } from "lucide-react";
 
 const Index = () => {
@@ -13,8 +13,7 @@ const Index = () => {
   const navigate = useNavigate();
 
   if (!user) {
-    navigate("/auth");
-    return null;
+    return <Navigate to="/auth" replace />;
   }
 
   return (
