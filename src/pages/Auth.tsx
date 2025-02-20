@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,32 +16,45 @@ const Auth = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
+  useEffect(() => {
+    // Check if user is already logged in
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session?.user) {
+        navigate("/");
+      }
+    });
+  }, [navigate]);
+
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     
     try {
-      const { error } = isLogin 
-        ? await supabase.auth.signInWithPassword({ email, password })
-        : await supabase.auth.signUp({ email, password });
-
-      if (error) throw error;
-      
-      if (!isLogin) {
+      if (isLogin) {
+        const { error } = await supabase.auth.signInWithPassword({ 
+          email, 
+          password 
+        });
+        if (error) throw error;
+        navigate("/");
+      } else {
+        const { error } = await supabase.auth.signUp({ 
+          email, 
+          password 
+        });
+        if (error) throw error;
         toast({
           title: "Success!",
           description: "Please check your email to verify your account.",
         });
-      } else {
-        navigate("/");
+        setLoading(false);
       }
-    } catch (error) {
+    } catch (error: any) {
       toast({
         title: "Error",
         description: error.message,
         variant: "destructive",
       });
-    } finally {
       setLoading(false);
     }
   };
@@ -75,6 +88,7 @@ const Auth = () => {
                 required
                 className="mt-1"
                 placeholder="Enter your email"
+                disabled={loading}
               />
             </div>
             <div>
@@ -87,6 +101,7 @@ const Auth = () => {
                 required
                 className="mt-1"
                 placeholder="Enter your password"
+                disabled={loading}
               />
             </div>
           </div>
@@ -100,6 +115,7 @@ const Auth = () => {
               type="button"
               onClick={() => setIsLogin(!isLogin)}
               className="text-sm text-blue-600 hover:text-blue-500"
+              disabled={loading}
             >
               {isLogin
                 ? "Don't have an account? Sign up"
